@@ -4,7 +4,7 @@ Official implementation of **Towards Effective and Efficient Time Series Forecas
 
 LlaD remaps variable-wise historical windows into a frozen LLM, adaptively aggregates multi-layer LLM features, distills them into a lightweight student encoder, and fuses the student-learned features with a time series branch for forecasting. At inference, the LLM is removed.
 
-
+![Overview of LlaD](figs/framework.png)
 
 *Overview of LlaD (Fig. 2). VTR remaps each variable into the frozen LLM input space; LAD aggregates and distills multi-layer features into a student encoder; BFA aligns LLM-derived features with temporal features. Red paths are disabled at inference.*
 
