@@ -50,9 +50,7 @@ class Dataset_ETT_hour(Dataset):
         self.data_path_file = data_path_file
 
         self.model_name = model_name
-        self.embed_path = f"/home/xiakaiwen/2025ST/TimeCMA-main/Embeddings/{data_path_file}/{flag}/"
-
-        self.external_scaler = external_scaler   # 保存引用
+        self.external_scaler = external_scaler   
         self.__read_data__()
 
     def __read_data__(self):
@@ -72,7 +70,7 @@ class Dataset_ETT_hour(Dataset):
             df_data = df_raw[[self.target]]
 
         if self.scale:
-            if self.external_scaler is not None:        # 使用外部 scaler
+            if self.external_scaler is not None:        
                 self.scaler = self.external_scaler
                 data = self.scaler.transform(df_data.values)
                 print(f"[{self.flag}] Using EXTERNAL scaler (type: {type(self.scaler).__name__})")
@@ -183,9 +181,7 @@ class Dataset_ETT_minute(Dataset):
         self.data_path_file = data_path_file
 
         self.model_name = model_name
-        self.embed_path = f"/home/xiakaiwen/2025ST/TimeCMA-main/Embeddings/{data_path_file}/{flag}/"
-
-        self.external_scaler = external_scaler   # ✅ 保存引用
+        self.external_scaler = external_scaler   
         self.__read_data__()
 
     def __read_data__(self):
@@ -205,7 +201,7 @@ class Dataset_ETT_minute(Dataset):
             df_data = df_raw[[self.target]]
 
         if self.scale:
-            if self.external_scaler is not None:        # ✅ 使用外部 scaler
+            if self.external_scaler is not None:        
                 self.scaler = self.external_scaler
                 data = self.scaler.transform(df_data.values)
             else:
@@ -280,7 +276,7 @@ class Dataset_ETT_minute_PCA(Dataset_ETT_minute):
 
 
 class Dataset_Custom(Dataset):
-    def __init__(self, root_path="/home/xiakaiwen/2026-zy/TimeCMA-main/dataset/", flag='train', size=None,
+    def __init__(self, root_path="./dataset/", flag='train', size=None,
                  features='M', data_path='ECL',
                  target='OT', scale=True, timeenc=0, freq='h',
                  patch_len=16,percent=100,model_name="gpt2",external_scaler=None, **kwargs):
@@ -317,23 +313,16 @@ class Dataset_Custom(Dataset):
         self.data_path_file = data_path_file
 
         self.model_name = model_name
-        self.embed_path = f"/home/xiakaiwen/2025ST/TimeCMA-main/Embeddings/{data_path_file}/{flag}/"
-
         self.__read_data__()
 
     def __read_data__(self):
         self.scaler = StandardScaler()
         df_raw = pd.read_csv(os.path.join(self.root_path,
                                           self.data_path))
-
-        '''
-        df_raw.columns: ['date', ...(other features), target feature]
-        '''
         cols = list(df_raw.columns)
         cols.remove(self.target)
         cols.remove('date')
         df_raw = df_raw[['date'] + cols + [self.target]]
-        # print(cols)
         num_train = int(len(df_raw) * 0.7)
         num_test = int(len(df_raw) * 0.2)
         num_vali = len(df_raw) - num_train - num_test
@@ -423,7 +412,7 @@ class Dataset_Custom_PCA(Dataset_Custom):
 
 
 class Dataset_PEMS(Dataset):
-    def __init__(self, root_path="/home/xiakaiwen/2026-zy/TimeCMA-main/dataset/",
+    def __init__(self, root_path="./dataset/",
                  flag='train', size=None,
                  features='M', data_path='PEMS03_data.csv',
                  target='OT', scale=True, timeenc=0, freq='t',
@@ -461,8 +450,6 @@ class Dataset_PEMS(Dataset):
         self.data_path_file = data_path_file
 
         self.model_name = model_name
-        self.embed_path = f"/home/xiakaiwen/2025ST/TimeCMA-main/Embeddings/{data_path_file}/{flag}/"
-
         self.__read_data__()
 
     def __read_data__(self):

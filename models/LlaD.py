@@ -38,10 +38,7 @@ class LlaD(nn.Module):
             self.time_to_pred = nn.Linear(self.seq_len, self.pred_len).to(self.device)
             self.feat_to_var = nn.Linear(self.channel, self.num_nodes).to(self.device)
 
-        self.gpt2 = GPT2Model.from_pretrained(
-            "/home/xiakaiwen/.cache/modelscope/hub/models/AI-ModelScope/gpt2",
-            local_files_only=True
-        )
+        self.gpt2 = GPT2Model.from_pretrained(model_name)
         
         self.gpt2.to(self.device)
         for param in self.gpt2.parameters():
