@@ -13,10 +13,10 @@ LlaD remaps variable-wise historical windows into a frozen LLM, adaptively aggre
 LlaD has three modules, corresponding to `layers/VTR.py`, `layers/LAD.py`, and `layers/BFA.py`.
 
 **Variable-wise Temporal Remapping (VTR).**  
-Each variable’s look-back window is treated as one token. A linear map \phi_{\mathrm{len}}: \mathbb{R}^{L} \rightarrow \mathbb{R}^{C} followed by a two-layer projector \phi_{\mathrm{remap}}: \mathbb{R}^{C} \rightarrow \mathbb{R}^{D_{\mathrm{LLM}}} produces LLM input embeddings Z^{(0)}. GPT-2 is frozen and is fed `inputs_embeds` (no text prompts).
+Each variable’s look-back window is treated as one token. A linear map $\phi_{\mathrm{len}}: \mathbb{R}^{L} \rightarrow \mathbb{R}^{C}$ followed by a two-layer projector $\phi_{\mathrm{remap}}: \mathbb{R}^{C} \rightarrow \mathbb{R}^{D_{\mathrm{LLM}}}$ produces LLM input embeddings $Z^{(0)}$. GPT-2 is frozen and is fed `inputs_embeds` (no text prompts).
 
 **Layer-Adaptive Distillation (LAD).**  
-All GPT-2 hidden states Z^{(1)},\ldots,Z^{(M)} are kept. Inter-layer attention uses the last layer as query and earlier layers as key/value, with a zero-initialized residual projection so the aggregator starts from Z^{(M)}. The aggregated teacher feature is distilled into a shallow Transformer student with temperature-scaled KL (\tau = 3). The distillation weight decays over training.
+All GPT-2 hidden states $Z^{(1)},\ldots,Z^{(M)}$ are kept. Inter-layer attention uses the last layer as query and earlier layers as key/value, with a zero-initialized residual projection so the aggregator starts from $Z^{(M)}$. The aggregated teacher feature is distilled into a shallow Transformer student with temperature-scaled KL ($\tau = 3$). The distillation weight decays over training.
 
 **Bidirectional Feature Alignment (BFA).**  
 Student (or teacher) LLM-derived features and the time series encoder features interact through bidirectional multi-head attention, concatenation fusion, and a residual LayerNorm, then a Transformer decoder produces the forecast.
@@ -26,7 +26,7 @@ At **inference**, GPT-2 and the teacher path are skipped. Only the student encod
 
 | Paper module                                   | Code                                                      |
 | ---------------------------------------------- | --------------------------------------------------------- |
-| VTR \phi_{\mathrm{len}}, \phi_{\mathrm{remap}} | `length_to_feature`, `ts_to_gpt_proj` in `models/LlaD.py` |
+| VTR $\phi_{\mathrm{len}}$, $\phi_{\mathrm{remap}}$ | `length_to_feature`, `ts_to_gpt_proj` in `models/LlaD.py` |
 | LAD inter-layer aggregation                    | `layers/LAD.py` (`InterLayerAggregation`)                 |
 | LAD student encoder                            | `student_proj`, `student_reasoning`                       |
 | BFA                                            | `layers/BFA.py` (`BidirectionalFeatureAlignment`)         |
